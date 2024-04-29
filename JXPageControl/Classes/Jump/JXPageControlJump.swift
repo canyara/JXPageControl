@@ -26,7 +26,9 @@ import UIKit
             else { return }
         
         CATransaction.setDisableActions(!isAnimation)
-        CATransaction.begin()
+        if (isAnimation) {
+            CATransaction.begin()
+        }
         
         let marginX = (maxIndicatorSize.width - activeSize.width) * 0.5
         let marginyY = (maxIndicatorSize.height - activeSize.height) * 0.5
@@ -47,7 +49,9 @@ import UIKit
         }
         
         currentIndex = Int(progress)
-        CATransaction.commit()
+        if (isAnimation) {
+            CATransaction.commit()
+        }
     }
     
     override func updateCurrentPage(_ pageIndex: Int) {
@@ -82,18 +86,8 @@ import UIKit
             CATransaction.commit()
             
         }else {
-            CATransaction.begin()
-            CATransaction.setCompletionBlock {[weak self] in
-                guard let strongSelf = self else { return }
-                activeLayer.frame.size.width = strongSelf.activeSize.width
+                activeLayer.frame.size.width = self.activeSize.width
                 activeLayer.frame.origin.x = activeLayerX
-            }
-            activeLayer.frame.origin.x = activeLayer.frame.origin.x - 0.1
-            CATransaction.begin()
-            let width = activeSize.width
-            activeLayer.frame.size.width = width
-            CATransaction.commit()
-            CATransaction.commit()
         }
         currentIndex = pageIndex
     }
